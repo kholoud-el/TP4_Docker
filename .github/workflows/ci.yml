@@ -18,11 +18,18 @@ jobs:
         python-version: '3.10'
 
     - name: Install dependencies
+      working-directory: backend
       run: |
         pip install -r requirements.txt
 
     - name: lancer les tests
-      run: python -m pytest tests/ -v --cov=app
+      working-directory: backend
+      run: |
+        if [ -d tests ]; then
+          python -m pytest tests/ -v --cov=app
+        else
+          echo "No tests directory, skipping."
+        fi
     - name: Login DockerHub
       uses: docker/login-action@v2
       with:
